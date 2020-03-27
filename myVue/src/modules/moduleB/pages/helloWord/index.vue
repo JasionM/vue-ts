@@ -55,7 +55,6 @@ export default class App extends Vue {
         {
           name: "12312",
           children: [
-            
           ]
         },
         {
@@ -75,7 +74,62 @@ export default class App extends Vue {
             {
               name: "12312",
               children: [
-                
+                {
+                  name: "12312",
+                  children: [
+                    {
+                      name: "12312",
+                      children: [
+                        
+                      ]
+                    }
+                  ]
+                },
+                {
+                  name: "12312",
+                  children: [
+                  ]
+                },
+                {
+                  name: "12312",
+                  children: [
+                    {
+                      name: "12312",
+                      children: [
+                        {
+                          name: "12312",
+                          children: [
+                            
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      name: "12312",
+                      children: [
+                        
+                      ]
+                    },
+                    {
+                      name: "12312",
+                      children: [
+                        
+                      ]
+                    },
+                    {
+                      name: "12312",
+                      children: [
+                        
+                      ]
+                    }
+                  ]
+                },
+                {
+                  name: "12312",
+                  children: [
+                    
+                  ]
+                }
               ]
             },
             {
@@ -131,5 +185,9 @@ a {
   height: 100px;
   background-color: #eee;
   border: 1px solid #ddd;
+}
+.hello{
+  width: 50vw;
+  height: 500px;
 }
 </style>

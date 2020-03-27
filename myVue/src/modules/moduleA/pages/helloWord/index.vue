@@ -1,120 +1,162 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li>
-        <a
-          href="https://vuejs.org"
-          target="_blank"
-        >
-          Core Docs
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://forum.vuejs.org"
-          target="_blank"
-        >
-          Forum
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://chat.vuejs.org"
-          target="_blank"
-        >
-          Community Chat
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://twitter.com/vuejs"
-          target="_blank"
-        >
-          Twitter
-        </a>
-      </li>
-      <br>
-      <li>
-        <a
-          href="http://vuejs-templates.github.io/webpack/"
-          target="_blank"
-        >
-          Docs for This Template
-        </a>
-      </li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li>
-        <a
-          href="http://router.vuejs.org/"
-          target="_blank"
-        >
-          vue-router
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vuex.vuejs.org/"
-          target="_blank"
-        >
-          vuex
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vue-loader.vuejs.org/"
-          target="_blank"
-        >
-          vue-loader
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-        >
-          awesome-vue
-        </a>
-      </li>
-    </ul>
+    <TreeFlowChart :data="data">
+      <template slot-scope="scope">
+        <div class="panel">
+          <span>{{scope.row.name}}</span>
+        </div>
+      </template>
+    </TreeFlowChart>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue"
 import Component from "vue-class-component"
+import Vue from "vue"
+import TreeFlowChart from "@/modules/moduleB/components/tree-flow-chart/index.vue"
 
-@Component
-export default class App extends Vue{
-  msg = 'Welcome to ModuleA'
+@Component({
+  components: {
+    TreeFlowChart
+  }
+})
+export default class App extends Vue {
+  data = [
+    // {
+    //   name: "12312",
+    //   children: [
+    //     {
+    //       name: "12312",
+    //       children: [
+    //         {
+    //           name: "12312",
+    //           children: [
+                
+    //           ]
+    //         }
+    //       ]
+    //     }
+    //   ]
+    // },
+    {
+      name: "12312",
+      children: [
+        {
+          name: "12312",
+          children: [
+            {
+              name: "12312",
+              children: [
+                
+              ]
+            }
+          ]
+        },
+        {
+          name: "12312",
+          children: [
+          ]
+        },
+        {
+          name: "12312",
+          children: [
+            {
+              name: "12312",
+              children: [
+                {
+                  name: "12312",
+                  children: [
+                    
+                  ]
+                }
+              ]
+            },
+            {
+              name: "12312",
+              children: [
+                {
+                  name: "12312",
+                  children: [
+                    {
+                      name: "12312",
+                      children: [
+                        
+                      ]
+                    }
+                  ]
+                },
+                {
+                  name: "12312",
+                  children: [
+                  ]
+                },
+                {
+                  name: "12312",
+                  children: [
+                    {
+                      name: "12312",
+                      children: [
+                        {
+                          name: "12312",
+                          children: [
+                            
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      name: "12312",
+                      children: [
+                        
+                      ]
+                    },
+                    {
+                      name: "12312",
+                      children: [
+                        
+                      ]
+                    },
+                    {
+                      name: "12312",
+                      children: [
+                        
+                      ]
+                    }
+                  ]
+                },
+                {
+                  name: "12312",
+                  children: [
+                    
+                  ]
+                }
+              ]
+            },
+            {
+              name: "12312",
+              children: [
+                
+              ]
+            },
+            {
+              name: "12312",
+              children: [
+                
+              ]
+            }
+          ]
+        },
+        {
+          name: "12312",
+          children: [
+            
+          ]
+        }
+      ]
+    }
+  ]
   activated() {
-    function fun1 () {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve();
-          console.log(11)
-        }, 1000);
-      })
-    }
-
-    function fun2 () {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve();
-          console.log(21)
-        }, 1000);
-      })
-    }
-
-    async function fun3 () {
-      await fun1();
-      await fun2();
-      console.log(31)
-    }
-    // fun3();
+    
   }
   created() {
 
@@ -123,7 +165,7 @@ export default class App extends Vue{
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="less">
 h1, h2 {
   font-weight: normal;
 }
@@ -137,5 +179,15 @@ li {
 }
 a {
   color: #42b983;
+}
+.panel{
+  width: 150px;
+  height: 100px;
+  background-color: #eee;
+  border: 1px solid #ddd;
+}
+.hello{
+  width: 50vw;
+  height: 500px;
 }
 </style>

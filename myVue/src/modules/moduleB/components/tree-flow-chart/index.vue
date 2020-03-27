@@ -1,19 +1,25 @@
 <template>
-    <div class="tree-flow-chart__container">
-        <TreeFlowChartItem 
-            v-for="(item, idx) in matchedData"
-            :key="idx"
-            :direction="direction"
-            :data="item"
-            :props="props"
-            :level="1"
-            :style="childNodeStyle"
-            :origin-offset="originOffset"
-            @getMaxChildrenLength="getMaxChildrenLength">
-            <template slot-scope="scope">
-                <slot v-bind="scope"></slot>
-            </template>
-        </TreeFlowChartItem>
+    <div 
+        class="tree-flow-chart__view" 
+        @mousedown="viewMousedown" 
+        @mousemove="viewMousemove" 
+        @mouseup="viewMouseup"
+        @mouseleave="overRanged"
+        @mousewheel="viewSizeChange">
+        <div class="tree-flow-chart__container" :class="{active: mouseDown}" style="left: 0;top: 0;">
+            <TreeFlowChartItem 
+                v-for="(item, idx) in matchedData"
+                :key="idx"
+                :direction="direction"
+                :data="item"
+                :props="props"
+                :level="1"
+                :origin-offset="originOffset">
+                <template slot-scope="scope">
+                    <slot v-bind="scope"></slot>
+                </template>
+            </TreeFlowChartItem>
+        </div>
     </div>
 </template>
 
@@ -25,9 +31,9 @@
             direction: {  //树形布置方向
                 type: String,
                 default: "bottom",
-                validator(val) {
-                    return ["top", "bottom", "left", "right"].includes(val)
-                }
+                // validator(val) {
+                //     return ["top", "bottom", "left", "right"].includes(val)
+                // }
             },
             data: {  //数据源
                 type: [Object, Array],
@@ -52,34 +58,107 @@
         },
         data() {
             return {
-                maxPanelLength: 0
+                maxPanelLength: 0,
+                childrenLengthArr: [],
+                treeDeep: 0,
+                startPostion: {
+                    x: 0,
+                    y: 0
+                },
+                containerStartPosition: {
+                    left: 0,
+                    top: 0
+                },
+                containerDOM: {},
+                viewDOM: {},
+                mouseDown: false,
+                overRange: false,
+                scale: 1,
             }
         },
         computed: {
             matchedData() {
                 const isArray = Object.prototype.toString.call(this.data) === '[object Array]'
                 let res = isArray ? this.data : [this.data]
+                this.treeDeep = this.getTreeDeep(res)
+                let currentLevelChildrenLength = 0
+                res.forEach(item => {
+                    let children = item[this.props.children] || []
+                    currentLevelChildrenLength += (children.length || 1)
+                })
+                res.forEach(item => {
+                    let children = item[this.props.children] || []
+                    item.widthPercentage = parseInt((children.length || 1) / currentLevelChildrenLength * 100)
+                })
                 return res 
             },
-            childNodeStyle() {
-                let width = parseInt(100 / this.matchedData.length)
-                return {
-                    flex: `1 1 ${width}%`
+            maxChildrenLength() {
+                return Math.max(...this.childrenLengthArr)
+            }
+        },
+        watch: {
+            matchedData: {
+                deep: true,
+                handler(val) {
+                    
                 }
             },
-            treeDeep() {
-                return this.getTreeDeep(this.matchedData)
-            },
-            containerWidth() {
-                this.$el.querySelectorAll(".tree-flow-chart-item__panel")
+            maxChildrenLength(val) {
+                this.containerWidth()
             }
         },
         created() {
             
         },
+        mounted() {
+            this.containerWidth()
+            this.containerDOM = this.$el.querySelector('.tree-flow-chart__container');
+            this.viewDOM = this.$el;
+        },
         methods: {
+            viewSizeChange(e) {
+                const wheelDelta = e.wheelDelta
+                if (wheelDelta > 0) {
+                    this.scale += 0.05
+                } else if (wheelDelta < 0) {
+                    this.scale -= 0.05
+                }
+
+                this.containerDOM.style.transform = `scale(${this.scale})`
+            },
+            overRanged() {
+                this.overRange = true
+            },
+            viewMousedown(e) {
+                this.mouseDown = true
+                this.overRange = false
+                this.startPostion.x = e.pageX
+                this.startPostion.y = e.pageY
+                this.containerStartPosition.left = parseInt(this.containerDOM.style.left || 0)
+                this.containerStartPosition.top = parseInt(this.containerDOM.style.top || 0)
+            },
+            viewMousemove(e) {
+                if (!this.mouseDown || this.overRange) {
+                    return false
+                }
+
+                let offset = {
+                    x: e.pageX - this.startPostion.x,
+                    y: e.pageY - this.startPostion.y
+                }
+ 
+                let left = parseInt(this.containerStartPosition.left || 0)
+                let top = parseInt(this.containerStartPosition.top || 0)
+                this.containerDOM.style.left = left + offset.x + "px"
+                this.containerDOM.style.top = top + offset.y + "px"
+            },
+            viewMouseup(e) {
+                this.mouseDown = false
+            },
             getTreeDeep(tree, childrenProp = 'children', level = 0) {
                 if (tree.length) {
+                    this.childrenLengthArr[level] = parseInt(this.childrenLengthArr[level] || 0) + tree.length
+
                     let max = ++level
 
                     tree.forEach(item => {
@@ -95,19 +174,40 @@
                 }
                 
             },
-            getMaxChildrenLength(length) {
-                this.maxPanelLength = 
-                    this.maxPanelLength > length 
-                    ? this.maxPanelLength : length
+            containerWidth() {
+                let panels = this.$el.querySelectorAll(".tree-flow-chart-item__panel");
+                if (panels.length) {
+                    let panel = panels[0]
+                    let contentWdith = panel.querySelector('.tree-flow-chart-item__absolute__content').clientWidth;
+                    let container = this.$el.querySelector('.tree-flow-chart__container')
+                    let width = contentWdith * this.maxChildrenLength * this.treeDeep + 'px'
+                    container.style.width = width
+                }
+            },
+            getWidthPercentage(item, level) {
+                return parseInt(item[this.props.children] / this.childrenLengthArr[level] * 100)
             }
         }
     }
 </script>
 
 <style lang="less" scoped>
+.tree-flow-chart__view{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    max-height: 100vh;
+    max-width: 100vw;
+    cursor: move;
+    position: relative;
+}
 .tree-flow-chart__container{
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    position: absolute;
+    user-select: none;
+    transition: transform .4s ease 0s;
+    transform: scale(1);
 }
 </style>

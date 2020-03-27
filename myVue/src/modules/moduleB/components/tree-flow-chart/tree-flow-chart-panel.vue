@@ -25,9 +25,9 @@
             direction: {
                 type: String,
                 default: "bottom",
-                validator(val) {
-                    return ["top", "bottom", "left", "right"].includes(val)
-                }
+                // validator(val) {
+                //     return ["top", "bottom", "left", "right"].includes(val)
+                // }
             },
             data: {
                 type: Object
@@ -73,7 +73,7 @@
                 }
 
                 panel.style.height = this.lineLength * 2 + contentStyleObj.height + "px"
-                panel.style.width = contentStyleObj.width + "px"
+                // panel.style.width = contentStyleObj.width + "px"
 
                 const beforeLine = originPoint.querySelector(".tree-node-line.before")
                 const afterLine = originPoint.querySelector(".tree-node-line.after")
