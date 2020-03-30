@@ -1,14 +1,40 @@
 <template>
     <div 
-        class="tree-flow-chart-item__panel" 
+        class="tree-flow-chart-item__panel"
         :class="{
                 'single-node': childrenLength === 1,
-                'multip-node': childrenLength > 1
+                'multip-node': childrenLength > 1,
+                'left-leaf': isLeftLeaf,
+                'right-leaf': isRightLeaf
             }">
         <div 
+            class="leaf-clear" 
+            v-if="isLeftLeaf || isRightLeaf"
+            :style="{
+                backgroundColor: backGroundColor
+            }">
+        </div>
+        <div
+            class="multip-bottom-line"
+            v-if="childrenLength > 1"
+            :style="{
+                backgroundColor: lineColor
+            }">
+        </div>
+        <div 
             class="tree-flow-chart-item__content__point">
-            <div class="tree-node-line before" v-if="level !== 1"></div>
-            <div class="tree-node-line after" v-if="childrenLength"></div>
+            <div 
+                class="tree-node-line before" 
+                v-if="level !== 1"
+                :style="{
+                    backgroundColor: lineColor
+                }"></div>
+            <div 
+                class="tree-node-line after" 
+                v-if="childrenLength"
+                :style="{
+                    backgroundColor: lineColor
+                }"></div>
             <div class="tree-flow-chart-item__absolute__content">
                 <slot :level="level" :row="data.source">
                     <span class="flow-default-content">{{data.name}}</span>
@@ -44,6 +70,21 @@
                 type: Number,
                 default:50
             },
+            backGroundColor: {
+                type: String
+            },
+            isLeftLeaf: {  //最左叶子
+                type: Boolean,
+                default: false
+            },
+            isRightLeaf: { //最右叶子
+                type: Boolean,
+                default: false
+            },
+            lineColor: { //链接线的颜色
+                type: String,
+                default: "#ddd"
+            }
         },
         data() {
             return {
@@ -94,17 +135,36 @@
 
 <style lang="less" scoped>
 .tree-flow-chart-item__panel{
-    &.multip-node{
-        position: relative;
-        &::after{
-            content: "";
-            display: inline-block;
-            width: 100%;
-            height: 2px;
-            background-color: #ddd;
-            position: absolute;
-            bottom: 0;
+    position: relative;
+    // &.multip-node{
+    //     &::after{
+    //         content: "";
+            
+    //     }
+    // }
+    .multip-bottom-line{
+        display: inline-block;
+        width: 100%;
+        height: 2px;
+        background-color: #ddd;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+    .leaf-clear{
+        position: absolute;
+        width: calc(50% - 1px);
+        height: 5px;
+        top: -2px;
+    }
+    &.left-leaf{
+        .leaf-clear{
             left: 0;
+        }
+    }
+    &.right-leaf{
+        .leaf-clear{
+            right: 0;
         }
     }
     .tree-flow-chart-item__content__point{

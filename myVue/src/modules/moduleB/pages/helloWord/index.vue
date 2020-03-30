@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <TreeFlowChart :data="data">
+    <TreeFlowChart :data="data" line-color="#42b983">
       <template slot-scope="scope">
         <div class="panel">
           <span>{{scope.row.name}}</span>
@@ -22,39 +22,20 @@ import TreeFlowChart from "@/modules/moduleB/components/tree-flow-chart/index.vu
 })
 export default class App extends Vue {
   data = [
-    // {
-    //   name: "12312",
-    //   children: [
-    //     {
-    //       name: "12312",
-    //       children: [
-    //         {
-    //           name: "12312",
-    //           children: [
-                
-    //           ]
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // },
-    {
-      name: "12312",
-      children: [
         {
           name: "12312",
           children: [
             {
               name: "12312",
               children: [
-                
+                {
+                  name: "12312",
+                  children: [
+                    
+                  ]
+                }
               ]
             }
-          ]
-        },
-        {
-          name: "12312",
-          children: [
           ]
         },
         {
@@ -74,6 +55,11 @@ export default class App extends Vue {
             {
               name: "12312",
               children: [
+              ]
+            },
+            {
+              name: "12312",
+              children: [
                 {
                   name: "12312",
                   children: [
@@ -83,11 +69,6 @@ export default class App extends Vue {
                         
                       ]
                     }
-                  ]
-                },
-                {
-                  name: "12312",
-                  children: [
                   ]
                 },
                 {
@@ -107,13 +88,40 @@ export default class App extends Vue {
                     {
                       name: "12312",
                       children: [
-                        
                       ]
                     },
                     {
                       name: "12312",
                       children: [
-                        
+                        {
+                          name: "12312",
+                          children: [
+                            {
+                              name: "12312",
+                              children: [
+                                
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          name: "12312",
+                          children: [
+                            
+                          ]
+                        },
+                        {
+                          name: "12312",
+                          children: [
+                            
+                          ]
+                        },
+                        {
+                          name: "12312",
+                          children: [
+                            
+                          ]
+                        }
                       ]
                     },
                     {
@@ -129,13 +137,13 @@ export default class App extends Vue {
                   children: [
                     
                   ]
+                },
+                {
+                  name: "12312",
+                  children: [
+                    
+                  ]
                 }
-              ]
-            },
-            {
-              name: "12312",
-              children: [
-                
               ]
             },
             {
@@ -145,21 +153,15 @@ export default class App extends Vue {
               ]
             }
           ]
-        },
-        {
-          name: "12312",
-          children: [
-            
-          ]
         }
       ]
-    }
-  ]
   activated() {
-    
+  
   }
   created() {
-
+    // setTimeout(() => {
+    //   this.data = 
+    // }, 1000);
   }
 }
 </script>

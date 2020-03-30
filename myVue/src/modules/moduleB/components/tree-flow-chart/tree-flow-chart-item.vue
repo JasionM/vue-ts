@@ -3,6 +3,10 @@
         <TreeFlowChartPanel 
             :data="matchItem(data)" 
             :origin-offset="originOffset"
+            :backGroundColor="backGroundColor"
+            :lineColor="lineColor"
+            :isLeftLeaf="isLeftLeaf"
+            :isRightLeaf="isRightLeaf"
             ref="flowPanel"
             :level="level">
             <template slot-scope="scope">
@@ -17,6 +21,10 @@
                 :data="item"
                 :style="childNodeStyle"
                 :props="props"
+                :lineColor="lineColor"
+                :isLeftLeaf="idx === 0"
+                :isRightLeaf="idx === data[props.children].length - 1"
+                :backGroundColor="backGroundColor"
                 :level="level + 1"
                 @getChildWidth="getChildWidth"
                 :origin-offset="originOffset">
@@ -63,6 +71,21 @@
             originOffset: { //树形面板中心点的位移（根据direction）
                 type: Number,
                 default: 0
+            },
+            backGroundColor: {
+                type: String
+            },
+            isLeftLeaf: {  //最左叶子
+                type: Boolean,
+                default: false
+            },
+            isRightLeaf: { //最右叶子
+                type: Boolean,
+                default: false
+            },
+            lineColor: { //链接线的颜色
+                type: String,
+                default: "#ddd"
             }
         },
         data() {
@@ -141,6 +164,7 @@
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
+        margin-top: -2px;
     }
 }
 </style>

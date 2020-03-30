@@ -1,6 +1,7 @@
 <template>
     <div 
-        class="tree-flow-chart__view" 
+        class="tree-flow-chart__view"
+        :style="{backgroundColor: backGroundColor}"
         @mousedown="viewMousedown" 
         @mousemove="viewMousemove" 
         @mouseup="viewMouseup"
@@ -14,6 +15,8 @@
                 :data="item"
                 :props="props"
                 :level="1"
+                :lineColor="lineColor"
+                :backGroundColor="backGroundColor"
                 :origin-offset="originOffset">
                 <template slot-scope="scope">
                     <slot v-bind="scope"></slot>
@@ -51,6 +54,14 @@
             originOffset: { //树形面板中心点的位移（根据direction）
                 type: Number,
                 default: 0
+            },
+            backGroundColor: {  //背景色
+                type: String,
+                default: "#fff"
+            },
+            lineColor: { //链接线的颜色
+                type: String,
+                default: "#ddd"
             }
         },
         components: {
@@ -123,7 +134,6 @@
                 } else if (wheelDelta < 0) {
                     this.scale -= 0.05
                 }
-
                 this.containerDOM.style.transform = `scale(${this.scale})`
             },
             overRanged() {
@@ -142,15 +152,32 @@
                     return false
                 }
 
-                let offset = {
+                const containerDOMRect = this.containerDOM.getBoundingClientRect()
+                const viewDOMRect = this.viewDOM.getBoundingClientRect()
+
+                const overRange = {
+                    left: containerDOMRect.x >= viewDOMRect.x,
+                    right: (containerDOMRect.x + containerDOMRect.width) 
+                            <= (viewDOMRect.x + viewDOMRect.width),
+                    top: containerDOMRect.y >= viewDOMRect.y,
+                    bottom: (containerDOMRect.y + containerDOMRect.height) <= (viewDOMRect.y + viewDOMRect.height)
+                }
+
+                const offset = {
                     x: e.pageX - this.startPostion.x,
                     y: e.pageY - this.startPostion.y
                 }
- 
-                let left = parseInt(this.containerStartPosition.left || 0)
-                let top = parseInt(this.containerStartPosition.top || 0)
-                this.containerDOM.style.left = left + offset.x + "px"
-                this.containerDOM.style.top = top + offset.y + "px"
+
+                const startLeft = parseInt(this.containerStartPosition.left || 0)
+                const startTop = parseInt(this.containerStartPosition.top || 0)
+
+                if ((offset.x > 0 && !overRange.left) || (offset.x < 0 && !overRange.right)) {
+                    this.containerDOM.style.left = startLeft + offset.x + "px"
+                }
+
+                if ((offset.y > 0 && !overRange.top) || (offset.y < 0 && !overRange.bottom)) {
+                    this.containerDOM.style.top = startTop + offset.y + "px"
+                }
             },
             viewMouseup(e) {
                 this.mouseDown = false
