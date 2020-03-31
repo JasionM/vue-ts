@@ -1,6 +1,7 @@
 <template>
     <div 
         class="tree-flow-chart__view"
+        v-preview="{contentDOM: '.tree-flow-chart__container'}"
         :style="{backgroundColor: backGroundColor}"
         @mousedown="viewMousedown" 
         @mousemove="viewMousemove" 
@@ -28,8 +29,12 @@
 
 <script>
     import TreeFlowChartItem from './tree-flow-chart-item'
+    import Preview from  '@/components/preview-view/index.js'
     export default {
         name: 'TreeFlowChart',
+        directives: {
+            Preview
+        },
         props: {
             direction: {  //树形布置方向
                 type: String,
@@ -119,7 +124,7 @@
             }
         },
         created() {
-            
+            console.log('tree flow created')
         },
         mounted() {
             this.containerWidth()
@@ -129,11 +134,36 @@
         methods: {
             viewSizeChange(e) {
                 const wheelDelta = e.wheelDelta
+                let startTempScale = this.scale
+
                 if (wheelDelta > 0) {
-                    this.scale += 0.05
+                    startTempScale += 0.02
                 } else if (wheelDelta < 0) {
-                    this.scale -= 0.05
+                    startTempScale -= 0.02
                 }
+
+                //是否是宽形容器（width > height）
+                const isWidthContainer = this.containerDOM.offsetWidth > this.containerDOM.offsetHeight
+                const scaledContainerOffsetWidth = this.containerDOM.offsetWidth * startTempScale
+                const scaledContainerOffsetHeight = this.containerDOM.offsetHeight * startTempScale
+
+                //是否到达最小的缩小倍率
+                //计算规则宽形容器的宽度 <= 视图宽度 || 长形容器的高度 <= 视图高度
+                const overMinScale = 
+                        isWidthContainer ? 
+                            scaledContainerOffsetWidth <= this.viewDOM.offsetWidth
+                            : scaledContainerOffsetHeight <= this.viewDOM.offsetHeight
+
+                //达到最小倍率，且还在进行缩小操作时，停止
+                if (overMinScale && wheelDelta < 0) {
+                    return
+                }
+
+                const containerDOMRect = this.containerDOM.getBoundingClientRect()
+                const viewDOMRect = this.viewDOM.getBoundingClientRect()
+
+                this.scale = startTempScale
+                
                 this.containerDOM.style.transform = `scale(${this.scale})`
             },
             overRanged() {
@@ -236,5 +266,6 @@
     user-select: none;
     transition: transform .4s ease 0s;
     transform: scale(1);
+    transform-origin: center top;
 }
 </style>

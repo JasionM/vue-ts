@@ -13,7 +13,7 @@
 <script lang="ts">
 import Component from "vue-class-component"
 import Vue from "vue"
-import TreeFlowChart from "@/modules/moduleB/components/tree-flow-chart/index.vue"
+import TreeFlowChart from "@/components/tree-flow-chart/index.vue"
 
 @Component({
   components: {

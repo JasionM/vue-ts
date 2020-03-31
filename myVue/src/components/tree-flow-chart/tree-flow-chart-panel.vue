@@ -154,8 +154,8 @@
     .leaf-clear{
         position: absolute;
         width: calc(50% - 1px);
-        height: 5px;
-        top: -2px;
+        height: 8px;
+        top: -3px;
     }
     &.left-leaf{
         .leaf-clear{

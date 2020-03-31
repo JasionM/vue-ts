@@ -1,23 +1,15 @@
 <template>
   <div class="hello">
-    <TreeFlowChart :data="data">
-      <template slot-scope="scope">
-        <div class="panel">
-          <span>{{scope.row.name}}</span>
-        </div>
-      </template>
-    </TreeFlowChart>
+    
   </div>
 </template>
 
 <script lang="ts">
 import Component from "vue-class-component"
 import Vue from "vue"
-import TreeFlowChart from "@/modules/moduleB/components/tree-flow-chart/index.vue"
 
 @Component({
   components: {
-    TreeFlowChart
   }
 })
 export default class App extends Vue {
