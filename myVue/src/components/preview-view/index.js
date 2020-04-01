@@ -23,6 +23,15 @@ export default {
 
         const contentDOM = isDOM(value.contentDOM) ? value.contentDOM : el.querySelector(value.contentDOM)
 
+        // let MutationObserver = window.MutationObserver || window.WebkitMutationObserver || window.MozMutationObserver
+        // const observer = new MutationObserver((mutationList) => {
+        //     for (const mutation of mutationList) {
+        //         console.log(mutation)
+        //     }
+        // })
+        
+        // observer.observer(contentDOM, { attributes: true, childList: true, subtree: true })
+
         const preview = new PreviewConstructor({
             el: document.createElement('div'),
             propsData: {
@@ -39,6 +48,7 @@ export default {
     inserted(el, binding, vnode) {
         
         el.appendChild(el.preview)
+        console.log()
     },
     update(el, binding, vnode) {
         
