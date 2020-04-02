@@ -8,7 +8,11 @@
         @mouseup="viewMouseup"
         @mouseleave="overRanged"
         @mousewheel="viewSizeChange">
-        <div class="tree-flow-chart__container" :class="{active: mouseDown}" style="left: 0;top: 0;">
+        <div 
+            class="tree-flow-chart__container" 
+            :style="{backgroundColor: backGroundColor}" 
+            :class="{active: mouseDown}" 
+            style="left: 0;top: 0;">
             <TreeFlowChartItem 
                 v-for="(item, idx) in matchedData"
                 :key="idx"
